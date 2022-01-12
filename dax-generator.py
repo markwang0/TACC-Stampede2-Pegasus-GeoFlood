@@ -12,8 +12,8 @@ if len(sys.argv) != 2:
 geoflood = ADAG("geoflood")
 
 # Add input file to the DAX-level replica catalog
-dem = File("ins/GIS/sablake/dem.tif")
-dem.addPFN(PFN("file://" + os.getcwd() + "/ins/GIS/sablake/dem.tif", "local"))
+dem = File("ins/GIS/sablake/sablake.tif")
+dem.addPFN(PFN("file://" + os.getcwd() + "/ins/GIS/sablake/sablake.tif", "local"))
 geoflood.addFile(dem)
 
 # Add input file to the DAX-level replica catalog
