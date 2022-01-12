@@ -12,28 +12,28 @@ if len(sys.argv) != 2:
 geoflood = ADAG("geoflood")
 
 # Add input file to the DAX-level replica catalog
-dem = File("GeoInputs/GIS/my_project/dem.tif")
-dem.addPFN(PFN("file://" + os.getcwd() + "/GeoInputs/GIS/my_project/dem.tif", "local"))
+dem = File("ins/GIS/sablake/dem.tif")
+dem.addPFN(PFN("file://" + os.getcwd() + "/ins/GIS/sablake/dem.tif", "local"))
 geoflood.addFile(dem)
 
 # Add input file to the DAX-level replica catalog
-flowline = File("GeoInputs/GIS/my_project/Flowline.shp")
-flowline.addPFN(PFN("file://" + os.getcwd() + "/GeoInputs/GIS/my_project/Flowline.shp", "local"))
+flowline = File("ins/GIS/sablake/Flowline.shp")
+flowline.addPFN(PFN("file://" + os.getcwd() + "/ins/GIS/sablake/Flowline.shp", "local"))
 geoflood.addFile(flowline)
 
 # Add input file to the DAX-level replica catalog
-catchment = File("GeoInputs/GIS/my_project/Catchment.shp")
-catchment.addPFN(PFN("file://" + os.getcwd() + "/GeoInputs/GIS/my_project/Catchment.shp", "local"))
+catchment = File("ins/GIS/sablake/Catchment.shp")
+catchment.addPFN(PFN("file://" + os.getcwd() + "/ins/GIS/sablake/Catchment.shp", "local"))
 geoflood.addFile(catchment)
 
 # Add input file to the DAX-level replica catalog
-comid_roughness = File("GeoInputs/Hydraulics/my_project/COMID_Roughness.csv")
-comid_roughness.addPFN(PFN("file://" + os.getcwd() + "/GeoInputs/Hydraulics/my_project/COMID_Roughness.csv", "local"))
+comid_roughness = File("ins/Hydraulics/sablake/COMID_Roughness.csv")
+comid_roughness.addPFN(PFN("file://" + os.getcwd() + "/ins/Hydraulics/sablake/COMID_Roughness.csv", "local"))
 geoflood.addFile(comid_roughness)
 
 # Add input file to the DAX-level replica catalog
-stage = File("GeoInputs/Hydraulics/my_project/stage.txt")
-stage.addPFN(PFN("file://" + os.getcwd() + "/GeoInputs/Hydraulics/my_project/stage.txt", "local"))
+stage = File("ins/Hydraulics/sablake/stage.txt")
+stage.addPFN(PFN("file://" + os.getcwd() + "/ins/Hydraulics/sablake/stage.txt", "local"))
 geoflood.addFile(stage)
 
 # Add executables to the DAX-level replica catalog
@@ -113,7 +113,7 @@ geoflood.addExecutable(e_inunmap)
 
 # Add a preprocess job
 pitremove = Job(namespace="geoflood", name="pitremove", version="Develop")
-fel = File("GeoInputs/GIS/my_project/dem_fel.tif")
+fel = File("ins/GIS/sablake/sablake_fel.tif")
 pitremove.addArguments("-a pitremove","-T5","-i",dem,"-o",fel)
 pitremove.uses(dem, link=Link.INPUT)
 pitremove.uses(fel, link=Link.OUTPUT)
@@ -124,7 +124,7 @@ geoflood.addJob(pitremove)
 
 # Add left Findrange job
 pygeonet_nonlinear_filter = Job(namespace="geoflood", name="pygeonet_nonlinear_filter", version="main")
-filtered = File("GeoOutputs/GIS/my_project/PM_filtered_grassgis.tif")
+filtered = File("outs/GIS/sablake/PM_filtered_grassgis.tif")
 pygeonet_nonlinear_filter.addArguments("-a pygeonet_nonlinear_filter","-T5","-i",dem,"-o",filtered)
 pygeonet_nonlinear_filter.uses(dem, link=Link.INPUT)
 pygeonet_nonlinear_filter.uses(filtered, link=Link.OUTPUT)
@@ -135,10 +135,10 @@ geoflood.addJob(pygeonet_nonlinear_filter)
 
 # Add left Findrange job
 pygeonet_grass_py3 = Job(namespace="geoflood", name="pygeonet_grass_py3", version="main")
-fac = File("GeoOutputs/GIS/my_project/dem_fac.tif")
-outlets = File("GeoOutputs/GIS/my_project/dem_outlets.tif")
-basins = File("GeoOutputs/GIS/my_project/dem_basins.tif")
-fdr = File("GeoOutputs/GIS/my_project/dem_fdr.tif")
+fac = File("outs/GIS/sablake/sablake_fac.tif")
+outlets = File("outs/GIS/sablake/sablake_outlets.tif")
+basins = File("outs/GIS/sablake/sablake_basins.tif")
+fdr = File("outs/GIS/sablake/sablake_fdr.tif")
 pygeonet_grass_py3.addArguments("-a pygeonet_grass_py3","-T5","-i",filtered,"-o",fac,outlets,basins,fdr)
 pygeonet_grass_py3.uses(filtered, link=Link.INPUT)
 pygeonet_grass_py3.uses(fac, link=Link.OUTPUT)
@@ -152,8 +152,8 @@ geoflood.addJob(pygeonet_grass_py3)
 
 # Add left Findrange job
 pygeonet_slope_curvature = Job(namespace="geoflood", name="pygeonet_slope_curvature", version="main")
-slope = File("GeoOutputs/GIS/my_project/dem_slope.tif")
-curvature = File("GeoOutputs/GIS/my_project/dem_curvature.tif")
+slope = File("outs/GIS/sablake/sablake_slope.tif")
+curvature = File("outs/GIS/sablake/sablake_curvature.tif")
 pygeonet_slope_curvature.addArguments("-a pygeonet_slope_curvature","-T5","-i",filtered,"-o",slope,curvature)
 pygeonet_slope_curvature.uses(filtered, link=Link.INPUT)
 pygeonet_slope_curvature.uses(slope, link=Link.OUTPUT)
@@ -165,9 +165,9 @@ geoflood.addJob(pygeonet_slope_curvature)
 
 # Add left Findrange job
 pygeonet_skeleton_definition = Job(namespace="geoflood", name="pygeonet_skeleton_definition", version="main")
-skeleton = File("GeoOutputs/GIS/my_project/dem_skeleton.tif")
-curvatureskeleton = File("GeoOutputs/GIS/my_project/dem_curvatureskeleton.tif")
-flowskeleton = File("GeoOutputs/GIS/my_project/dem_flowskeleton.tif")
+skeleton = File("outs/GIS/sablake/sablake_skeleton.tif")
+curvatureskeleton = File("outs/GIS/sablake/sablake_curvatureskeleton.tif")
+flowskeleton = File("outs/GIS/sablake/sablake_flowskeleton.tif")
 pygeonet_skeleton_definition.addArguments("-a pygeonet_skeleton_definition","-T5","-i",filtered,curvature,fac,"-o",skeleton,curvatureskeleton,flowskeleton)
 pygeonet_skeleton_definition.uses(filtered, link=Link.INPUT)
 pygeonet_skeleton_definition.uses(curvature, link=Link.INPUT)
@@ -182,7 +182,7 @@ geoflood.addJob(pygeonet_skeleton_definition)
 
 # Add left Findrange job
 network_node_reading = Job(namespace="geoflood", name="network_node_reading", version="main")
-endpoints = File("GeoOutputs/GIS/my_project/dem_endPoints.csv")
+endpoints = File("outs/GIS/sablake/sablake_endPoints.csv")
 network_node_reading.addArguments("-a network_node_reading","-T5","-i",flowline,"-o",endpoints)
 network_node_reading.uses(flowline, link=Link.INPUT)
 network_node_reading.uses(endpoints, link=Link.OUTPUT)
@@ -193,9 +193,9 @@ geoflood.addJob(network_node_reading)
 
 # Add left Findrange job
 relative_height_estimation = Job(namespace="geoflood", name="relative_height_estimation", version="main")
-negahand = File("GeoOutputs/GIS/my_project/dem_NegaHand.tif")
-nhdflowline = File("GeoOutputs/GIS/my_project/dem_nhdflowline.tif")
-allocation = File("GeoOutputs/GIS/my_project/dem_Allocation.tif")
+negahand = File("outs/GIS/sablake/sablake_NegaHand.tif")
+nhdflowline = File("outs/GIS/sablake/sablake_nhdflowline.tif")
+allocation = File("outs/GIS/sablake/sablake_Allocation.tif")
 relative_height_estimation.addArguments("-a relative_height_estimation","-T5","-i",flowline,"-o",negahand,nhdflowline,allocation)
 relative_height_estimation.uses(flowline, link=Link.INPUT)
 relative_height_estimation.uses(negahand, link=Link.OUTPUT)
@@ -208,9 +208,9 @@ geoflood.addJob(relative_height_estimation)
 
 # Add left Findrange job
 network_extraction = Job(namespace="geoflood", name="network_extraction", version="main")
-channelnetwork = File("GeoOutputs/GIS/my_project/dem_channelNetwork.shp")
-cost = File("GeoOutputs/GIS/my_project/dem_cost.tif")
-path = File("GeoOutputs/GIS/my_project/dem_path.tif")
+channelnetwork = File("outs/GIS/sablake/sablake_channelNetwork.shp")
+cost = File("outs/GIS/sablake/sablake_cost.tif")
+path = File("outs/GIS/sablake/sablake_path.tif")
 network_extraction.addArguments("-a network_extraction","-T5","-i",skeleton,curvature,fac,endpoints,negahand,"-o",channelnetwork,cost,path)
 network_extraction.uses(skeleton, link=Link.INPUT)
 network_extraction.uses(curvature, link=Link.INPUT)
@@ -227,8 +227,8 @@ geoflood.addJob(network_extraction)
 
 # Add right Findrange job
 dinfflowdir = Job(namespace="geoflood", name="dinfflowdir", version="main")
-slp = File("GeoOutputs/GIS/my_project/dem_slp.tif")
-ang = File("GeoOutputs/GIS/my_project/dem_ang.tif")
+slp = File("outs/GIS/sablake/sablake_slp.tif")
+ang = File("outs/GIS/sablake/sablake_ang.tif")
 dinfflowdir.addArguments("-a findrange","-T5","-i",fel,"-o",slp,ang)
 dinfflowdir.uses(fel, link=Link.INPUT)
 dinfflowdir.uses(slp, link=Link.OUTPUT)
@@ -240,7 +240,7 @@ geoflood.addJob(dinfflowdir)
 
 # Add right Findrange job
 dinfdistdown = Job(namespace="geoflood", name="dinfdistdown", version="main")
-hand = File("GeoOutputs/GIS/my_project/dem_hand.tif")
+hand = File("outs/GIS/sablake/sablake_hand.tif")
 dinfdistdown.addArguments("-a findrange","-T5","-i",path,fel,slp,ang,"-o",hand)
 dinfdistdown.uses(path, link=Link.INPUT)
 dinfdistdown.uses(fel, link=Link.INPUT)
@@ -254,7 +254,7 @@ geoflood.addJob(dinfdistdown)
 
 # Add right Findrange job
 streamline_segmentation = Job(namespace="geoflood", name="streamline_segmentation", version="main")
-channelsegment = File("GeoOutputs/GIS/my_project/dem_channelSegment.shp")
+channelsegment = File("outs/GIS/sablake/sablake_channelSegment.shp")
 streamline_segmentation.addArguments("-a streamline_segmentation","-T5","-i",channelnetwork,"-o",channgelsegment)
 streamline_segmentation.uses(channelnetwork, link=Link.INPUT)
 streamline_segmentation.uses(channelsegment, link=Link.OUTPUT)
@@ -265,7 +265,7 @@ geoflood.addJob(streamline_segmentation)
 
 # Add right Findrange job
 grass_delineation_py3 = Job(namespace="geoflood", name="grass_delineation_py3", version="main")
-segmentcatchmenttif = File("GeoOutputs/GIS/my_project/dem_segmentCatchment.tif")
+segmentcatchmenttif = File("outs/GIS/sablake/sablake_segmentCatchment.tif")
 grass_delineation_py3.addArguments("-a grass_delineation_py3","-T5","-i",channelsegment,fdr,"-o",segmentcatchmenttif)
 grass_delineation_py3.uses(channelsegment, link=Link.INPUT)
 grass_delineation_py3.uses(fdr, link=Link.INPUT)
@@ -277,8 +277,8 @@ geoflood.addJob(grass_delineation_py3)
 
 # Add right Findrange job
 river_attribute_estimation = Job(namespace="geoflood", name="river_attribute_estimation", version="main")
-river_attribute = File("GeoOutputs/Hydraulics/my_project/dem_River_Attribute.txt")
-segmentcatchmentshp = File("GeoOutputs/GIS/my_project/dem_segmentCatchment.shp")
+river_attribute = File("outs/Hydraulics/sablake/sablake_River_Attribute.txt")
+segmentcatchmentshp = File("outs/GIS/sablake/sablake_segmentCatchment.shp")
 river_attribute_estimation.addArguments("-a river_attribute_estimation","-T5","-i",channelsegment,segmentcatchmenttif,"-o",river_attribute,segmentcatchmentshp)
 river_attribute_estimation.uses(channelsegment, link=Link.INPUT)
 river_attribute_estimation.uses(segmentcatchmenttif, link=Link.INPUT)
@@ -291,7 +291,7 @@ geoflood.addJob(river_attribute_estimation)
 
 # Add right Findrange job
 catchhydrogeo = Job(namespace="geoflood", name="catchhydrogeo", version="main")
-hydroprop_basetable = File("GeoOutputs/Hydraulics/my_project/hydroprop-basetable.csv")
+hydroprop_basetable = File("outs/Hydraulics/sablake/hydroprop-basetable.csv")
 catchhydrogeo.addArguments("-a catchhydrogeo","-T5","-i",river_attribute,stage,slp,segmentcatchmenttif,hand,"-o",hydroprop_basetable)
 catchhydrogeo.uses(river_attribute, link=Link.INPUT)
 catchhydrogeo.uses(stage, link=Link.INPUT)
@@ -306,7 +306,7 @@ geoflood.addJob(catchhydrogeo)
 
 # Add right Findrange job
 network_mapping = Job(namespace="geoflood", name="network_mapping", version="main")
-networkmapping = File("GeoOutputs/Hydraulics/my_project/dem_networkMapping.csv")
+networkmapping = File("outs/Hydraulics/sablake/sablake_networkMapping.csv")
 network_mapping.addArguments("-a network_mapping","-T5","-i",catchment,"-o",networkmapping)
 network_mapping.uses(catchment, link=Link.INPUT)
 network_mapping.uses(networkmapping, link=Link.OUTPUT)
@@ -317,7 +317,7 @@ geoflood.addJob(network_mapping)
 
 # Add right Findrange job
 hydraulic_property_postprocess = Job(namespace="geoflood", name="hydraulic_property_postprocess", version="main")
-hydroprop_fulltable = File("GeoOutputs/Hydraulics/my_project/hydroprop-fulltable.csv")
+hydroprop_fulltable = File("outs/Hydraulics/sablake/hydroprop-fulltable.csv")
 hydraulic_property_postprocess.addArguments("-a hydraulic_property_postprocess","-T5","-i",networkmapping,comid_roughness,hydroprop_basetable,"-o",hydroprop_fulltable)
 hydraulic_property_postprocess.uses(networkmapping, link=Link.INPUT)
 hydraulic_property_postprocess.uses(comid_roughness, link=Link.INPUT)
@@ -330,7 +330,7 @@ geoflood.addJob(hydraulic_property_postprocess)
 
 # Add right Findrange job
 forecast_table = Job(namespace="geoflood", name="forecast_table", version="main")
-nwm_conusnc = File("GeoOutputs/NWM/my_project/nwm.....conus.nc")
+nwm_conusnc = File("outs/NWM/sablake/nwm.....conus.nc")
 forecast_table.addArguments("-a forecast_table","-T5","-i",networkmapping,comid_roughness,hydroprop_basetable,"-o",hydroprop_fulltable)
 forecast_table.uses(networkmapping, link=Link.INPUT)
 forecast_table.uses(comid_roughness, link=Link.INPUT)
@@ -343,7 +343,7 @@ geoflood.addJob(forecast_table)
 
 # Add right Findrange job
 inunmap = Job(namespace="geoflood", name="inunmap", version="main")
-nwm_inunmap = File("GeoOutputs/Inundation/my_project/dem_NWM_inunmap.tif")
+nwm_inunmap = File("outs/Inundation/sablake/sablake_NWM_inunmap.tif")
 inunmap.addArguments("-a inunmap","-T5","-i",nwm_conusnc,segmentcatchmenttif,hand,"-o",nwm_inunmap)
 inunmap.uses(nwm_conusnc, link=Link.INPUT)
 inunmap.uses(segmentcatchmenttif, link=Link.INPUT)
