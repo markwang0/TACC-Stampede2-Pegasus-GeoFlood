@@ -8,7 +8,7 @@ if len(sys.argv) != 2:
         print("Usage: %s PEGASUS_HOME" % (sys.argv[0]))
         sys.exit(1)
 
-geoflood_dir = '/work2/08291/mwa/stampede2/sablake_copy'
+geoflood_dir = '/work2/08291/mwa/stampede2/sablake_copy/'
 
 # Create a abstract dag
 geoflood = ADAG("geoflood")
