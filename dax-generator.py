@@ -8,34 +8,34 @@ if len(sys.argv) != 2:
         print("Usage: %s PEGASUS_HOME" % (sys.argv[0]))
         sys.exit(1)
 
-geoflood_dir = '/work2/08291/mwa/stampede2/sablake_copy/'
+geoflood_dir = '/scratch/08291/mwa/GeoFlood/'
 
 # Create a abstract dag
 geoflood = ADAG("geoflood")
 
 # Add input file to the DAX-level replica catalog
 dem = File(geoflood_dir + "ins/GIS/sablake/sablake.tif")
-dem.addPFN(PFN("file://" + os.getcwd() + "/ins/GIS/sablake/sablake.tif", "local"))
+dem.addPFN(PFN("file://" + geoflood_dir + "ins/GIS/sablake/sablake.tif", "local"))
 geoflood.addFile(dem)
 
 # Add input file to the DAX-level replica catalog
 flowline = File(geoflood_dir + "ins/GIS/sablake/Flowline.shp")
-flowline.addPFN(PFN("file://" + os.getcwd() + "/ins/GIS/sablake/Flowline.shp", "local"))
+flowline.addPFN(PFN("file://" + geoflood_dir + "ins/GIS/sablake/Flowline.shp", "local"))
 geoflood.addFile(flowline)
 
 # Add input file to the DAX-level replica catalog
 catchment = File(geoflood_dir + "ins/GIS/sablake/Catchment.shp")
-catchment.addPFN(PFN("file://" + os.getcwd() + "/ins/GIS/sablake/Catchment.shp", "local"))
+catchment.addPFN(PFN("file://" + geoflood_dir + "ins/GIS/sablake/Catchment.shp", "local"))
 geoflood.addFile(catchment)
 
 # Add input file to the DAX-level replica catalog
 comid_roughness = File(geoflood_dir + "ins/Hydraulics/sablake/COMID_Roughness.csv")
-comid_roughness.addPFN(PFN("file://" + os.getcwd() + "/ins/Hydraulics/sablake/COMID_Roughness.csv", "local"))
+comid_roughness.addPFN(PFN("file://" + geoflood_dir + "ins/Hydraulics/sablake/COMID_Roughness.csv", "local"))
 geoflood.addFile(comid_roughness)
 
 # Add input file to the DAX-level replica catalog
 stage = File(geoflood_dir + "ins/Hydraulics/sablake/stage.txt")
-stage.addPFN(PFN("file://" + os.getcwd() + "/ins/Hydraulics/sablake/stage.txt", "local"))
+stage.addPFN(PFN("file://" + geoflood_dir + "ins/Hydraulics/sablake/stage.txt", "local"))
 geoflood.addFile(stage)
 
 # Add executables to the DAX-level replica catalog
