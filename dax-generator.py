@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+::/usr/bin/env python
 
 from Pegasus.DAX3 import *
 import sys
@@ -174,7 +174,7 @@ pygeonet_skeleton_definition.addArguments("-a pygeonet_skeleton_definition","-T5
 pygeonet_skeleton_definition.uses(filtered, link=Link.INPUT)
 pygeonet_skeleton_definition.uses(curvature, link=Link.INPUT)
 pygeonet_skeleton_definition.uses(fac, link=Link.INPUT)
-pygeonet_skeleton_definition.uses(skelton, link=Link.OUTPUT)
+pygeonet_skeleton_definition.uses(skeleton, link=Link.OUTPUT)
 pygeonet_skeleton_definition.uses(curvatureskeleton, link=Link.OUTPUT)
 pygeonet_skeleton_definition.uses(flowskeleton, link=Link.OUTPUT)
 # required resources for the job
