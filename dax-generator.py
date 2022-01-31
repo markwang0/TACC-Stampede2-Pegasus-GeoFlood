@@ -1,4 +1,4 @@
-::/usr/bin/env python
+#!/usr/bin/env python
 
 from Pegasus.DAX3 import *
 import sys
